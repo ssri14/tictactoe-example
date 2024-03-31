@@ -35,12 +35,18 @@ jobs:
           release_name: Release ${{ github.ref_name }}
           draft: false
           prerelease: false
+      - name: Find JAR file
+        id: set_jar_path
+        run: |
+          JAR_FILE=$(find ./target -name '*complete*.jar' | head -n 1)
+          echo "JAR_FILE=$JAR_FILE" >> $GITHUB_ENV
+          echo "::set-output name=jar_path::$JAR_FILE"
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This reference is important
-          asset_path: ./target/*complete*.jar
-          asset_name: tictactoe-${{ github.ref }}.jar
+          asset_path: ${{ steps.set_jar_path.outputs.jar_path }}
+          asset_name: ${{ env.JAR_FILE }}
           asset_content_type: application/java-archive
