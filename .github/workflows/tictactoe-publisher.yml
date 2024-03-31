@@ -48,5 +48,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This reference is important
           asset_path: ${{ steps.set_jar_path.outputs.jar_path }}
-          asset_name: tictactoe-${{ github.ref }}.jar
+          asset_name: tictactoe-${{ github.ref_name }}.jar
           asset_content_type: application/java-archive
