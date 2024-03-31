@@ -1,6 +1,7 @@
 name: Tic Tac Toe CI/CD
 on:
   push:
+    # Uncomment if we want to run workflows on branches too
     # branches:
     #   - main
     tags:
