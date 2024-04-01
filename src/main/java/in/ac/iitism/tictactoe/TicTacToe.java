@@ -16,7 +16,7 @@ public class TicTacToe extends JFrame {
 	private boolean currentPlayer = true; // true for X, false for O
 
 	public TicTacToe() {
-		setTitle("Tic Tac Toe Fun App");
+		setTitle("Tic Tac Toe");
 		setSize(300, 300);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new GridLayout(3, 3));
