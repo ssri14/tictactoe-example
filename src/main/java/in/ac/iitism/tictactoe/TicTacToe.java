@@ -1,26 +1,39 @@
 package in.ac.iitism.tictactoe;
 
+import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 public class TicTacToe extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private final JButton[][] buttons = new JButton[3][3];
 	private boolean currentPlayer = true; // true for X, false for O
+	private final JLabel statusLabel = new JLabel("X's turn", SwingConstants.CENTER);
 
 	public TicTacToe() {
 		setTitle("Tic Tac Toe");
 		setSize(300, 300);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLayout(new GridLayout(3, 3));
-		setLocationRelativeTo(null);
+		setLayout(new BorderLayout());
+		setLocationRelativeTo(null); // Center the window on the screen
+
+		// Create a panel for the grid
+		JPanel gridPanel = new JPanel(new GridLayout(3, 3));
+		add(gridPanel, BorderLayout.CENTER);
+		add(statusLabel, BorderLayout.SOUTH);
+		statusLabel.setFont(new Font("Arial", Font.BOLD, 16));
+		statusLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
 		// Initialize buttons
 		for (int i = 0; i < 3; i++) {
@@ -30,7 +43,7 @@ public class TicTacToe extends JFrame {
 				button.setFont(new Font("Arial", Font.PLAIN, 40));
 				button.setFocusPainted(false);
 				button.addActionListener(new ButtonListener());
-				add(button);
+				gridPanel.add(button);
 			}
 		}
 	}
@@ -42,8 +55,10 @@ public class TicTacToe extends JFrame {
 			if (button.getText().equals("")) {
 				if (currentPlayer) {
 					button.setText("X");
+					statusLabel.setText("O's turn");
 				} else {
 					button.setText("O");
+					statusLabel.setText("X's turn");
 				}
 				currentPlayer = !currentPlayer;
 				checkForWin();
@@ -53,20 +68,14 @@ public class TicTacToe extends JFrame {
 
 	public void checkForWin() {
 		for (int i = 0; i < 3; i++) {
-			// Check rows
+			// Check rows and columns
 			if (!buttons[i][0].getText().equals("") && 
-				buttons[i][0].getText().equals(buttons[i][1].getText()) && 
-				buttons[i][1].getText().equals(buttons[i][2].getText())) {
+					buttons[i][0].getText().equals(buttons[i][1].getText()) && 
+					buttons[i][1].getText().equals(buttons[i][2].getText()) ||
+					!buttons[0][i].getText().equals("") && 
+					buttons[0][i].getText().equals(buttons[1][i].getText()) && 
+					buttons[1][i].getText().equals(buttons[2][i].getText())) {
 				JOptionPane.showMessageDialog(this, buttons[i][0].getText() + " wins!");
-				resetBoard();
-				return;
-			}
-
-			// Check columns
-			if (!buttons[0][i].getText().equals("") && 
-				buttons[0][i].getText().equals(buttons[1][i].getText()) && 
-				buttons[1][i].getText().equals(buttons[2][i].getText())) {
-				JOptionPane.showMessageDialog(this, buttons[0][i].getText() + " wins!");
 				resetBoard();
 				return;
 			}
@@ -74,11 +83,11 @@ public class TicTacToe extends JFrame {
 
 		// Check diagonals
 		if (!buttons[0][0].getText().equals("") &&
-			buttons[0][0].getText().equals(buttons[1][1].getText()) && 
-			buttons[1][1].getText().equals(buttons[2][2].getText()) ||
-			!buttons[0][2].getText().equals("") &&
-			buttons[0][2].getText().equals(buttons[1][1].getText()) && 
-			buttons[1][1].getText().equals(buttons[2][0].getText())) {
+				buttons[0][0].getText().equals(buttons[1][1].getText()) && 
+				buttons[1][1].getText().equals(buttons[2][2].getText()) ||
+				!buttons[0][2].getText().equals("") &&
+				buttons[0][2].getText().equals(buttons[1][1].getText()) && 
+				buttons[1][1].getText().equals(buttons[2][0].getText())) {
 			JOptionPane.showMessageDialog(this, buttons[1][1].getText() + " wins!");
 			resetBoard();
 			return;
@@ -108,6 +117,7 @@ public class TicTacToe extends JFrame {
 			}
 		}
 		currentPlayer = true; // Reset to player X
+		statusLabel.setText("X's turn"); // Reset the status label
 	}
 
 	public static void main(String[] args) {
